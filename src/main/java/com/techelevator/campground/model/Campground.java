@@ -1,14 +1,11 @@
 package com.techelevator.campground.model;
 
-
-import java.util.Date;
-
 public class Campground {
 private int campground_id;
 private int park_id;
 private String name;
-private Date open_from_mm;
-private Date open_to_mm;
+private String open_from_mm;
+private String open_to_mm;
 private int daily_fee;
 
 
@@ -32,16 +29,16 @@ public String getName() {
 public void setName(String name) {
 	this.name = name;
 }
-public Date getOpen_from_mm() {
+public String getOpen_from_mm() {
 	return open_from_mm;
 }
-public void setOpen_from_mm(Date open_from_mm) {
+public void setOpen_from_mm(String open_from_mm) {
 	this.open_from_mm = open_from_mm;
 }
-public Date getOpen_to_mm() {
+public String getOpen_to_mm() {
 	return open_to_mm;
 }
-public void setOpen_to_mm(Date open_to_mm) {
+public void setOpen_to_mm(String open_to_mm) {
 	this.open_to_mm = open_to_mm;
 }
 public int getDaily_fee() {
