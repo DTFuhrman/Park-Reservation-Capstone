@@ -12,6 +12,8 @@ public class Screen {
 	private PrintWriter out;
 	private Scanner in;
 	
+	
+	/*
 	public Screen(InputStream input, OutputStream output) {
 		this.out = new PrintWriter(output);
 		this.in = new Scanner(input);
@@ -93,4 +95,5 @@ public class Screen {
 		}
 		return printed;
 	}
+	*/
 }

@@ -4,8 +4,8 @@ public class Campground {
 private int campground_id;
 private int park_id;
 private String name;
-private String open_from_mm;
-private String open_to_mm;
+private int open_from_mm;
+private int open_to_mm;
 private int daily_fee;
 
 
@@ -29,16 +29,16 @@ public String getName() {
 public void setName(String name) {
 	this.name = name;
 }
-public String getOpen_from_mm() {
+public int getOpen_from_mm() {
 	return open_from_mm;
 }
-public void setOpen_from_mm(String open_from_mm) {
+public void setOpen_from_mm(int open_from_mm) {
 	this.open_from_mm = open_from_mm;
 }
-public String getOpen_to_mm() {
+public int getOpen_to_mm() {
 	return open_to_mm;
 }
-public void setOpen_to_mm(String open_to_mm) {
+public void setOpen_to_mm(int open_to_mm) {
 	this.open_to_mm = open_to_mm;
 }
 public int getDaily_fee() {

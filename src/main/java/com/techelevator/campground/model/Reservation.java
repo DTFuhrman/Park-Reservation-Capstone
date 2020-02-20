@@ -1,14 +1,15 @@
 package com.techelevator.campground.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Reservation {
 	private int reservation_id;
 	private int site_id;
 	private String name;
-	private Date from_date;
-	private Date to_date;
-	private Date create_date;
+	private LocalDate from_date;
+	private LocalDate to_date;
+	private LocalDate create_date;
 	
 	
 	//GETTERS AND SETTERS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -30,22 +31,22 @@ public class Reservation {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Date getFrom_date() {
+	public LocalDate getFrom_date() {
 		return from_date;
 	}
-	public void setFrom_date(Date from_date) {
+	public void setFrom_date(LocalDate from_date) {
 		this.from_date = from_date;
 	}
-	public Date getTo_date() {
+	public LocalDate getTo_date() {
 		return to_date;
 	}
-	public void setTo_date(Date to_date) {
+	public void setTo_date(LocalDate to_date) {
 		this.to_date = to_date;
 	}
-	public Date getCreate_date() {
+	public LocalDate getCreate_date() {
 		return create_date;
 	}
-	public void setCreate_date(Date create_date) {
+	public void setCreate_date(LocalDate create_date) {
 		this.create_date = create_date;
 	}
 	
