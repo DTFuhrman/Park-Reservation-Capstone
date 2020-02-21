@@ -6,10 +6,10 @@ public interface SiteDAO {
 
 	public Site mapSiteFromSQL(int site_id, int campground_id, int site_number, int max_occupancy, boolean accessible, int max_rv_length, boolean utilities);
 	
-	public List<Campground> getAllCampSitesWithUtilityHookups();
+	public List<Site> getAllCampSitesWithUtilityHookups();
 	
-	public List<Campground> getAllHandicapAccessibleCampSites();
+	public List<Site> getAllHandicapAccessibleCampSites();
 	
-	public List<Campground> getRVAccessibleCampSites();
+	public List<Site> getRVAccessibleCampSites();
 	
 }
