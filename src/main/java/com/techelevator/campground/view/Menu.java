@@ -12,13 +12,13 @@ public class Menu {
 	private PrintWriter out;
 	private Scanner in;
 
-	//Constructor
+
 	public Menu(InputStream input, OutputStream output) {
 		this.out = new PrintWriter(output);
 		this.in = new Scanner(input);
 	}
 
-	//This will work great, except displayMenuItems isn't finished
+
 	public Object getChoiceFromOptions(Object[] options) {
 		Object choice = null;
 		while(choice == null) {
@@ -28,7 +28,7 @@ public class Menu {
 		return choice;
 	}
 
-	//They differentiated between menu options and user input
+
 	private Object getChoiceFromUserInput(Object[] options) {
 		Object choice = null;
 		String userInput = in.nextLine();
@@ -47,9 +47,6 @@ public class Menu {
 	}
 
 	
-	//
-	//We need to figure out how our menus are organized before 
-	//we can finish this, and that will happen in CLI
 	private void displayMenuOptions(Object[] options) {
 		out.println();
 		for(int i = 0; i < options.length; i++) {
@@ -58,6 +55,11 @@ public class Menu {
 		}
 		out.print("\nPlease choose an option >>> ");
 		out.flush();
+	}
+	
+	public String getGenericInput() {
+		String input = in.nextLine();
+		return input;
 	}
 	
 }

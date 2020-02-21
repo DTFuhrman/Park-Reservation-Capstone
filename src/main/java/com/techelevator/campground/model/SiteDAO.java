@@ -1,5 +1,6 @@
 package com.techelevator.campground.model;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface SiteDAO {
@@ -11,5 +12,7 @@ public interface SiteDAO {
 	public List<Site> getAllHandicapAccessibleCampSites();
 	
 	public List<Site> getRVAccessibleCampSites();
+	
+	public List<Site> getSitesReservedOnDates(int campground_id, LocalDate start, LocalDate end);
 	
 }
