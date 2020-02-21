@@ -1,6 +1,7 @@
 package com.techelevator.campground.model.jdbc;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +39,7 @@ public class JdbcReservationDao implements ReservationDAO {
 
 	@Override
 	public Reservation getReservationById(int reservationId) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 	
@@ -62,7 +63,8 @@ public class JdbcReservationDao implements ReservationDAO {
 	
 	@Override
 	public List<Reservation> getReservationsByDate(LocalDate date) {
-		// TODO Auto-generated method stub
+
+		
 		return null;
 	}
 	

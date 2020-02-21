@@ -70,20 +70,20 @@ public class JdbcParkDao implements ParkDAO {
 
 
 	//Fix this SQL query
-//	@Override
-//	public List<Park> getAllParksWithVacancy() {
-//		List<Park> parksWithVacancy = new ArrayList<>();
-//		String sqlGetAllParksWithVacancy = "SELECT * FROM park JOIN campground ON park.park_id = campground.park_id JOIN site ON campground.campground_id = site.campground_id WHERE site.utilities = true";
-//		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetAllParksWithVacancy);
-//		
-//		while (results.next()) {
-//			Park newPark = mapFromSQL(results.getString("name"), results.getString("location"),
-//					results.getDate("establish_date"), results.getDouble("area"), results.getInt("visitors"),
-//					results.getString("description"));
-//			
-//			parksWithVacancy.add(newPark);
-//		}
-//		return null;
-//	}
+	@Override
+	public List<Park> getAllParksWithVacancy() {
+		List<Park> parksWithVacancy = new ArrayList<>();
+		String sqlGetAllParksWithVacancy = "SELECT * FROM park JOIN campground ON park.park_id = campground.park_id JOIN site ON campground.campground_id = site.campground_id WHERE site.utilities = true";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetAllParksWithVacancy);
+		
+		while (results.next()) {
+			Park newPark = mapFromSQL(results.getString("name"), results.getString("location"),
+					results.getDate("establish_date"), results.getDouble("area"), results.getInt("visitors"),
+					results.getString("description"));
+			
+			parksWithVacancy.add(newPark);
+		}
+		return null;
+	}
 
 }
