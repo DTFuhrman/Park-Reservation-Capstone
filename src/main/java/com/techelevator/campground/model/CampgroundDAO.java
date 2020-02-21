@@ -14,7 +14,7 @@ public interface CampgroundDAO {
 	
 	public List<Campground> getAllCampgroundsWithVacancy(LocalDate resStart, LocalDate resEnd);
 	
-	public List<Campground> getAllCampgroundsInSeason(LocalDate resStart, LocalDate resEnd);
+	public List<Campground> getAllCampgroundsInSeason(int resStartMonth, int resEndMonth);
 	
 	public List<Campground> getAllCampgroundsWithUtilityHookups();
 	

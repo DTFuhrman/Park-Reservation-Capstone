@@ -1,6 +1,7 @@
 package com.techelevator.campground.model.jdbc;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -60,22 +61,60 @@ public class JdbcCampgroundDao implements CampgroundDAO {
 		return campgrounds;
 	}
 
+	
+	
+	//*********************************************
+	//*********************************************
+	//*************NOT WORKING YET*****************
+	//*********************************************
+	//*********************************************
 	@Override
 	public List<Campground> getAllCampgroundsWithVacancy(LocalDate resStart, LocalDate resEnd) {
-		// TODO Auto-generated method stub
-		return null;
+		//Grab all the reservations between the dates
+		//compare the desired reservation dates
+		//use a left join to find empty entries where there is no reservation matvhing the query
+		
+		
+		List<Campground> campgroundsInSeason = new ArrayList<>();
+		String sqlCampgroundsSeasonQueary = "SELECT * FROM campground JOIN site ON campground.site_id = site.site_id JOIN reservation ON site.site_id = reservation.site_id WHERE reservation. >= ? AND login_date <  ?";
+		//format start date
+		String formattedStartDate = resStart.format(DateTimeFormatter.ofPattern("yy-dd-MM"));
+		//format end date
+		String formattedEndDate = resStart.format(DateTimeFormatter.ofPattern("yy-dd-MM"));
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlCampgroundsSeasonQueary, formattedStartDate, formattedEndDate);
+		while (results.next()){
+			Campground eachCampground = mapCampgroundFromSQL(results.getInt("campground_id"), results.getInt("park_id"), results.getString("name"), results.getInt("open_from_mm"), results.getInt("open_to_mm"), results.getInt("daily_fee"));
+			campgroundsInSeason.add(eachCampground);
+		}
+		
+		return campgroundsInSeason;
 	}
 
 	@Override
-	public List<Campground> getAllCampgroundsInSeason(LocalDate resStart, LocalDate resEnd) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Campground> getAllCampgroundsInSeason(int resStartMonth, int resEndMonth) {
+		List<Campground> campgroundsInSeason = new ArrayList<>();
+		String sqlCampgroundsSeasonQueary = "SELECT * FROM campground JOIN site ON campground.site_id = site.site_id JOIN reservation ON site.site_id = reservation.site_id WHERE open_from_mm <= ? AND open_to_mm >  ?";
+		
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlCampgroundsSeasonQueary, resStartMonth, resEndMonth);
+		while (results.next()){
+			Campground eachCampground = mapCampgroundFromSQL(results.getInt("campground_id"), results.getInt("park_id"), results.getString("name"), results.getInt("open_from_mm"), results.getInt("open_to_mm"), results.getInt("daily_fee"));
+			campgroundsInSeason.add(eachCampground);
+		}
+		
+		return campgroundsInSeason;
 	}
 
 	@Override
 	public List<Campground> getAllCampgroundsWithUtilityHookups() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Campground> campgroundsWithUtil = new ArrayList<>();
+		String sqlAllCampgroundsQueary = "SELECT * FROM campground JOIN site ON campground.campground_id = site.campground_id WHERE utilities = TRUE";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlAllCampgroundsQueary);
+		while (results.next()){
+			Campground eachCampground = mapCampgroundFromSQL(results.getInt("campground_id"), results.getInt("park_id"), results.getString("name"), results.getInt("open_from_mm"), results.getInt("open_to_mm"), results.getInt("daily_fee"));
+			campgroundsWithUtil.add(eachCampground);
+		}
+		
+		return campgroundsWithUtil;
 	}
 
 }
