@@ -72,11 +72,11 @@ public class JdbcCampgroundDao implements CampgroundDAO {
 	public List<Campground> getAllCampgroundsWithVacancy(LocalDate resStart, LocalDate resEnd) {
 		//Grab all the reservations between the dates
 		//compare the desired reservation dates
-		//use a left join to find empty entries where there is no reservation matvhing the query
+		//use a left join to find empty entries where there is no reservation matching the query
 		
 		
 		List<Campground> campgroundsInSeason = new ArrayList<>();
-		String sqlCampgroundsSeasonQueary = "SELECT * FROM campground JOIN site ON campground.site_id = site.site_id JOIN reservation ON site.site_id = reservation.site_id WHERE reservation. >= ? AND login_date <  ?";
+		String sqlCampgroundsSeasonQueary = "SELECT * FROM campground JOIN site ON campground.site_id = site.site_id JOIN reservation ON site.site_id = reservation.site_id WHERE reservation. >= ?::date AND login_date <  ?::date";
 		//format start date
 		String formattedStartDate = resStart.format(DateTimeFormatter.ofPattern("yy-dd-MM"));
 		//format end date
