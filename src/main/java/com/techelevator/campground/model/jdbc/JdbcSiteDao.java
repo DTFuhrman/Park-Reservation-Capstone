@@ -11,11 +11,11 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import com.techelevator.campground.model.Site;
 import com.techelevator.campground.model.SiteDAO;
 
-public class JbdcSiteDao implements SiteDAO {
+public class JdbcSiteDao implements SiteDAO {
 
 	private JdbcTemplate jdbcTemplate;
 
-	public JbdcSiteDao(DataSource dataSource) {
+	public JdbcSiteDao(DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
