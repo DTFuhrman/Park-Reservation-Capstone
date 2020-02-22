@@ -1,5 +1,6 @@
 package com.techelevator;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -10,7 +11,9 @@ import com.techelevator.campground.model.Campground;
 import com.techelevator.campground.model.CampgroundDAO;
 import com.techelevator.campground.model.Park;
 import com.techelevator.campground.model.ParkDAO;
+import com.techelevator.campground.model.Reservation;
 import com.techelevator.campground.model.ReservationDAO;
+import com.techelevator.campground.model.Site;
 import com.techelevator.campground.model.SiteDAO;
 import com.techelevator.campground.model.jdbc.JdbcCampgroundDao;
 import com.techelevator.campground.model.jdbc.JdbcParkDao;
@@ -65,6 +68,8 @@ public class CampgroundCLI {
 
 	public CampgroundCLI(DataSource dataSource) {
 		// create your DAOs here
+		this.menu = new Menu(System.in, System.out);
+
 		campgroundDAO = new JdbcCampgroundDao(dataSource);
 		reservationDAO = new JdbcReservationDao(dataSource);
 		parkDAO = new JdbcParkDao(dataSource);
@@ -72,55 +77,141 @@ public class CampgroundCLI {
 	}
 
 	public void run() {
-		//Start the flow once control flow is done
-		displayMApplicationBanner();
-		printHeading("Main Menu");
-		while(true) {
-			printMenu(MAIN_MENU_OPTIONS);
-			String input = AcceptMenuInput(MAIN_MENU_OPTIONS);
-			if input.equals(MAIN_MENU_VIEW_PARK_DETAILS){
+		// Start the flow once control flow is done
+		mainMenu();
+	}
+
+	public void mainMenu() {
+		menu.displayBanner("Main Menu");
+		while (true) {
+			menu.printMenu(MAIN_MENU_OPTIONS);
+			String input = acceptMainMenuInput(MAIN_MENU_OPTIONS);
+			if (input.equals(MAIN_MENU_VIEW_PARK_DETAILS)) {
 				handleParkList();
-			} 
-			if input.equals(MAIN_MENU_PICK_PARK_FOR_RESERVATION){
+			}
+			if (input.equals(MAIN_MENU_PICK_PARK_FOR_RESERVATION)) {
 				handlePickPark();
-			} 
-			if input.equals(MAIN_MENU_PARK_WIDE_RESERVATION){
+			}
+			if (input.equals(MAIN_MENU_PARK_WIDE_RESERVATION)) {
 				handleParkwideReservation();
-			} 
-			if input.equals(MAIN_MENU_OPTION_EXIT){
+			}
+			if (input.equals(MAIN_MENU_OPTION_EXIT)) {
 				System.exit(0);
 			}
 		}
 	}
 
-	// Menu methods and Handle methods
-	public void handleParkList() {
-		
-		List<Park> parks = parkDAO.getAllParks();
-		printHeading("Our Beautiful Parks");
-		while(true) {
-		printParkList(parks);
-		String input = AcceptParkListInput(parks);
-		int parkNumber = Integer.parseInt(input);
-		Park thePark = parks.get(parkNumber);
-		handleCampground(thePark);
-		if input.equals("back"){
-			break;
-		}
-		}
-		
-	}
-	
-	public void handleCampground(Park park) {
-		String parkName = park.getName(); //get it from the list above using the number
-		
-		printHeading(parkName +" Campgrounds:");
-		List<Campground> campgrounds = campgroundDAO.getAllCampgroundsByPark((int)park.getPark_id());
-		while(true) {
-		printCampgroundList(campgrounds);
-		String input =  AcceptCampgroundInput(campgrounds);
-		
-		Campground theCampground = 
+	private String acceptMainMenuInput(String[] mainMenuOptions) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
+	// Menu methods and Handle methods
+	public void handleParkList() {
+
+		menu.displayBanner("Park List");
+		List<Park> parks = parkDAO.getAllParks();
+		while (true) {
+			menu.printParkList(parks);
+			Park choicePark = acceptParkListInput(parks);
+			if (choicePark == null) {
+				System.out.println("No Valid Park Found");
+				continue;
+			} else if (choicePark.toString().equals("Back")) {
+				break; 
+			} else {
+				handleParkDetail(choicePark);
+			}
+		}
+	}
+
+	private Park acceptParkListInput(List<Park> parks) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private void handleParkDetail(Park choicePark) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void handlePickPark() {
+		List<Park> parks = parkDAO.getAllParks();
+		menu.displayBanner("Pick a Park");
+		while (true) {
+			menu.printParkList(parks);
+			Park choicePark = acceptPickParkInput(parks);
+			if (choicePark == null) {
+				System.out.println("<***** Please Enter a Number or Select (Back) *****>");
+			}
+			if (choicePark.toString().equals("Back")) {
+				break;
+			}
+			handleCampground(choicePark);
+		}
+	}
+
+	private Park acceptPickParkInput(List<Park> parks) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void handleCampground(Park park) {
+		String parkName = park.getName();
+		menu.displayBanner(parkName + " | Campgrounds");
+		List<Campground> campgrounds = campgroundDAO.getAllCampgroundsByPark((int) park.getPark_id());
+		while (true) {
+			menu.printCampgroundList(campgrounds);
+			Campground choiceCampground = acceptCampgroundInput(campgrounds);
+			handleReservationByCampground(choiceCampground);
+		}
+	}
+
+	private Campground acceptCampgroundInput(List<Campground> campgrounds) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void handleReservationByCampground(Campground campground) {
+		int chosenCampgroundID = campground.getCampground_id();
+		while (true) {
+			LocalDate[] reservationDates = acceptReservationInput();
+			List<Site> reservedSites = siteDAO.getSitesReservedOnDates(chosenCampgroundID, reservationDates[0],
+					reservationDates[1]);
+			handleSiteList(reservedSites);
+			menu.printSiteList(reservedSites);
+			Reservation justBooked = checkReservation(chosenCampgroundID, reservationDates[0], reservationDates[1]);
+			boolean booked = bookReservation(justBooked);
+			handleBookAttempt(booked);
+		}
+	}
+
+	private LocalDate[] acceptReservationInput() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private void handleSiteList(List<Site> reservedSites) {
+
+	}
+
+	private Reservation checkReservation(int chosenCampgroundID, LocalDate localDate, LocalDate localDate2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private void handleParkwideReservation() {
+		// TODO Auto-generated method stub
+
+	}
+	
+	private boolean bookReservation(Reservation justBooked) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	private void handleBookAttempt(boolean booked) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -53,5 +53,7 @@ public class Site {
 		this.utilities = utilities;
 	}
 	
-	
+	public String toString() {
+		return "Site " + this.site_id + "|" + this.site_number;
+	}
 }

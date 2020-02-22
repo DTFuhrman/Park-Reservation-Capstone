@@ -48,7 +48,9 @@ public void setDaily_fee(int daily_fee) {
 	this.daily_fee = daily_fee;
 }
 
-
+public String toString() {
+	return this.name;
+}
 
 
 }

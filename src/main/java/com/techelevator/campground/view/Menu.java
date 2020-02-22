@@ -4,8 +4,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+
+import com.techelevator.campground.model.Campground;
+import com.techelevator.campground.model.Park;
+import com.techelevator.campground.model.Site;
 
 public class Menu {
 
@@ -47,6 +52,7 @@ public class Menu {
 	}
 
 	
+	
 	private void displayMenuOptions(Object[] options) {
 		out.println();
 		for(int i = 0; i < options.length; i++) {
@@ -60,6 +66,34 @@ public class Menu {
 	public String getGenericInput() {
 		String input = in.nextLine();
 		return input;
+	}
+
+	
+	public void printMenu(String[] mainMenuOptions) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void displayBanner(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void printCampgroundList(List<Campground> campgrounds) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void printParkList(List<Park> parks) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void printSiteList(List<Site> reservedSites) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
