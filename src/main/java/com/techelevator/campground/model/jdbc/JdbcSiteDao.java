@@ -1,5 +1,7 @@
 package com.techelevator.campground.model.jdbc;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,4 +90,25 @@ public class JdbcSiteDao implements SiteDAO {
 		return RVAccessibleCampsites;
 	}
 
+	@Override
+	public List<Site> getSitesReservedOnDates(int campground_id, LocalDate start, LocalDate end) {
+
+		List<Site> UnavailableCampsites = new ArrayList<>();
+		
+		String sqlGetUnavailableCampsites = "SELECT * FROM site LEFT JOIN reservation ON site.site_id = reservation.site_id WHERE (campground_id = ?) AND (daterange(from_date, to_date, '[]') && daterange(date ?, date ?, '[]')) AND from_date IS NOT NULL";
+		String formattedStartDate = start.format(DateTimeFormatter.ofPattern("yy-dd-MM"));
+		String formattedEndDate = end.format(DateTimeFormatter.ofPattern("yy-dd-MM"));
+		
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetUnavailableCampsites, campground_id, formattedStartDate, formattedEndDate);
+
+		while (results.next()) {
+			Site newCampsite = mapSiteFromSQL(results.getInt("site_id"), results.getInt("campground_id"),
+					results.getInt("site_number"), results.getInt("max_occupancy"), results.getBoolean("accessible"),
+					results.getInt("max_rv_length"), results.getBoolean("utilities"));
+
+			UnavailableCampsites.add(newCampsite);
+		}
+
+		return UnavailableCampsites;
+	}
 }
