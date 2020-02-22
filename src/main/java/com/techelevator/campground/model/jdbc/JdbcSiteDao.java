@@ -35,7 +35,39 @@ public class JdbcSiteDao implements SiteDAO {
 
 		return theSite;
 	}
+	
 
+	@Override
+	public List<Site> getAllSites() {
+		List<Site> campsites = new ArrayList<>();
+		String sqlGetAllCampsites = "SELECT * FROM site";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetAllCampsites);
+
+		while (results.next()) {
+			Site newCampsite = mapSiteFromSQL(results.getInt("site_id"), results.getInt("campground_id"),
+					results.getInt("site_number"), results.getInt("max_occupancy"), results.getBoolean("accessible"),
+					results.getInt("max_rv_length"), results.getBoolean("utilities"));
+			campsites.add(newCampsite);
+		}
+		return campsites;
+	}
+
+	@Override
+	public List<Site> getAllSitesByCampground(int campground_id) {
+		List<Site> campsitesByCampground = new ArrayList<>();
+		String sqlGetAllCampsitesByCampground = "SELECT * FROM site WHERE campground_id = ?";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetAllCampsitesByCampground, campground_id);
+
+		while (results.next()) {
+			Site newCampsite = mapSiteFromSQL(results.getInt("site_id"), results.getInt("campground_id"),
+					results.getInt("site_number"), results.getInt("max_occupancy"), results.getBoolean("accessible"),
+					results.getInt("max_rv_length"), results.getBoolean("utilities"));
+
+			campsitesByCampground.add(newCampsite);
+		}
+
+		return campsitesByCampground;
+	}
 	
 	@Override
 	public List<Site> getAllCampSitesWithUtilityHookups() {

@@ -3,6 +3,7 @@ package com.techelevator.campground.view;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,12 +12,16 @@ import java.util.Scanner;
 import com.techelevator.campground.model.Campground;
 import com.techelevator.campground.model.Park;
 import com.techelevator.campground.model.Site;
+import com.techelevator.campground.model.SiteDAO;
 
 public class Menu {
 
 	private PrintWriter out;
 	private Scanner in;
 
+	private String[] bannerNames = new String[] {
+			"Main Menu", "Pick Park", "Park List", "Campground", "Site" 
+	};
 
 	public Menu(InputStream input, OutputStream output) {
 		this.out = new PrintWriter(output);
@@ -24,6 +29,11 @@ public class Menu {
 	}
 
 
+	
+	/* ************ WE STOLE THIS FROM PROJECTS CLI!!! *************** 
+	 
+	 
+	 
 	public Object getChoiceFromOptions(Object[] options) {
 		Object choice = null;
 		while(choice == null) {
@@ -63,19 +73,44 @@ public class Menu {
 		out.flush();
 	}
 	
+	
+	 */
+	
 	public String getGenericInput() {
 		String input = in.nextLine();
 		return input;
 	}
 
-	
-	public void printMenu(String[] mainMenuOptions) {
-		// TODO Auto-generated method stub
-		
+	public void printMenu(String[] menuOptions) {
+		System.out.println("\n");
+		for(String str : menuOptions) {
+			System.out.println(str);
+		}
 	}
 
-	public void displayBanner(String string) {
-		// TODO Auto-generated method stub
+	public void displayBanner(String bannerName) {
+		if (bannerName.equals(bannerNames[0])) {
+			System.out.println("National Park Interface Main Menu\n"
+					+ "What can we do for you today?\n");
+		}
+		
+		if (bannerName.equals(bannerNames[1])) {
+			System.out.println("Select Park To Book A Reservation\n");
+		}
+		
+		if (bannerName.equals(bannerNames[2])) {
+			System.out.println("Select Park For Further Details\n");
+		}
+		
+		if (bannerName.contains(bannerNames[3])) {
+			String[] array = bannerName.split("\\|");
+			String parkName = array[0];
+			System.out.println("Welcome to " + parkName + "\nPlease Select a Campground\n");
+		}
+
+		if (bannerName.contains(bannerNames[4])) {
+			System.out.println("Let's Make a Reservation\n");
+		}
 		
 	}
 
@@ -86,14 +121,42 @@ public class Menu {
 
 
 	public void printParkList(List<Park> parks) {
-		// TODO Auto-generated method stub
-		
+		int i = 1;
+		for (Park park: parks) {
+			String displayLine = i + ".) " + park.toString();
+			System.out.println(displayLine);
+			i++;
+		}	
+		System.out.println("\n" + i + ".) Quit\n");
 	}
 
-
-	public void printSiteList(List<Site> reservedSites) {
-		// TODO Auto-generated method stub
+//refactor this if you can figure out how to just get a list of unreserved sites
+	public void printSiteListByCampground(List<Site> reservedSites, List<Site> allSites, Campground campground, int numOfDays) {
 		
+		List<Site> availableSites = new ArrayList<Site>();
+		for (Site checkSite: allSites) {
+			boolean matchFound = false;
+			for (Site reservedSite: reservedSites) {
+				if(checkSite.getSite_id() == reservedSite.getSite_id()) {
+					matchFound = true;
+				}
+			}
+			if(!matchFound) {
+				availableSites.add(checkSite);
+			}
+		}
+		
+		System.out.println("Results Matching Your Search Criteria");
+		System.out.println("=========================================================>");
+		System.out.println("Site No.   Max Occup.   Accessible?   RV Length   Utility?   Cost(In USD)");
+		
+		double costPerDay = campground.getDaily_fee();
+		double totalCost = numOfDays * costPerDay;
+		for (Site site: availableSites) {
+
+			System.out.println(site.getSite_number() + "\t" +site.getMax_occupancy() + "\t" +site.isAccessible() + "\t" + site.getMax_rv_length() + "\t" + site.isUtilities() + "\t$" + totalCost);
+		}
+
 	}
 	
 }
