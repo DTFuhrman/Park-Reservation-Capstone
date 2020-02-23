@@ -6,7 +6,7 @@ private int park_id;
 private String name;
 private int open_from_mm;
 private int open_to_mm;
-private int daily_fee;
+private double daily_fee;
 
 
 
@@ -41,10 +41,10 @@ public int getOpen_to_mm() {
 public void setOpen_to_mm(int open_to_mm) {
 	this.open_to_mm = open_to_mm;
 }
-public int getDaily_fee() {
+public double getDaily_fee() {
 	return daily_fee;
 }
-public void setDaily_fee(int daily_fee) {
+public void setDaily_fee(double daily_fee) {
 	this.daily_fee = daily_fee;
 }
 

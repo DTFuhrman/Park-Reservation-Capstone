@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Park {
 
-	private long park_id;
+	private int park_id;
 	private String name;
 	private String location;
 	private Date establish_date;
@@ -14,10 +14,10 @@ public class Park {
 	
 	
 	//GETTERS AND SETTERS!!!!
-	public long getPark_id() {
+	public int getPark_id() {
 		return park_id;
 	}
-	public void setPark_id(long park_id) {
+	public void setPark_id(int park_id) {
 		this.park_id = park_id;
 	}
 	public String getName() {

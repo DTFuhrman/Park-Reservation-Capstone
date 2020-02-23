@@ -115,8 +115,16 @@ public class Menu {
 	}
 
 	public void printCampgroundList(List<Campground> campgrounds) {
-		// TODO Auto-generated method stub
 		
+		work to do! Add details
+		
+		int i = 1;
+		for (Campground camp: campgrounds) {
+			String displayLine = i + ".) " + camp.toString();
+			System.out.println(displayLine);
+			i++;
+		}	
+		System.out.println("\n" + i + ".) Back\n");
 	}
 
 
@@ -127,7 +135,7 @@ public class Menu {
 			System.out.println(displayLine);
 			i++;
 		}	
-		System.out.println("\n" + i + ".) Quit\n");
+		System.out.println("\n" + i + ".) Back\n");
 	}
 
 //refactor this if you can figure out how to just get a list of unreserved sites
@@ -157,6 +165,36 @@ public class Menu {
 			System.out.println(site.getSite_number() + "\t" +site.getMax_occupancy() + "\t" +site.isAccessible() + "\t" + site.getMax_rv_length() + "\t" + site.isUtilities() + "\t$" + totalCost);
 		}
 
+	}
+	
+	public void printSiteListByPark(List<Site> reservedSites, List<Campground> campgrounds, List<Site> allSites, Park park, int numOfDays) {
+		
+		List<Site> availableSites = new ArrayList<Site>();
+		for (Site checkSite: allSites) {
+			boolean matchFound = false;
+			for (Site reservedSite: reservedSites) {
+				if(checkSite.getSite_id() == reservedSite.getSite_id()) {
+					matchFound = true;
+				}
+			}
+			if(!matchFound) {
+				availableSites.add(checkSite);
+			}
+		}
+		
+		System.out.println("Results Matching Your Search Criteria");
+		System.out.println("====================================================================>");
+		System.out.println("Campground  Site No.   Max Occup.   Accessible?   RV Length   Utility?   Cost(In USD)");
+	
+		work to do!
+		
+		double costPerDay = campgrounds.getDaily_fee();
+		double totalCost = numOfDays * costPerDay;
+		for (Site site: availableSites) {
+			
+			System.out.println(site.getSite_number() + "\t" +site.getMax_occupancy() + "\t" +site.isAccessible() + "\t" + site.getMax_rv_length() + "\t" + site.isUtilities() + "\t$" + totalCost);
+		}
+		
 	}
 	
 }

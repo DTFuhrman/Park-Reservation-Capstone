@@ -53,6 +53,23 @@ public class JdbcSiteDao implements SiteDAO {
 	}
 
 	@Override
+	public List<Site> getAllSitesByPark(int park_id) {
+		List<Site> campsitesByPark = new ArrayList<>();
+		String sqlGetAllCampsitesByPark = "SELECT * FROM site JOIN campground on site.campground_id = campground.campground_id WHERE campground.park_id = ?";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetAllCampsitesByPark, park_id);
+
+		while (results.next()) {
+			Site newCampsite = mapSiteFromSQL(results.getInt("site_id"), results.getInt("campground_id"),
+					results.getInt("site_number"), results.getInt("max_occupancy"), results.getBoolean("accessible"),
+					results.getInt("max_rv_length"), results.getBoolean("utilities"));
+
+			campsitesByPark.add(newCampsite);
+		}
+
+		return campsitesByPark;
+	}
+	
+	@Override
 	public List<Site> getAllSitesByCampground(int campground_id) {
 		List<Site> campsitesByCampground = new ArrayList<>();
 		String sqlGetAllCampsitesByCampground = "SELECT * FROM site WHERE campground_id = ?";
@@ -142,5 +159,11 @@ public class JdbcSiteDao implements SiteDAO {
 		}
 
 		return UnavailableCampsites;
+	}
+
+	@Override
+	public List<Site> getSitesReservedOnDatesByPark(int chosenParkID, LocalDate localDate, LocalDate localDate2) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

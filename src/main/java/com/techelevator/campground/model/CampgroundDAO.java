@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CampgroundDAO {
 	
-	public Campground mapCampgroundFromSQL (int campground_id, int park_id, String name, int open_from_mm, int open_to_mm, int daily_fee);
+	public Campground mapCampgroundFromSQL (int campground_id, int park_id, String name, int open_from_mm, int open_to_mm, double daily_fee);
 	
 	public List<Campground> getAllCampgroundsByPark(int park_id);
 	
