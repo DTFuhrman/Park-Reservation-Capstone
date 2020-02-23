@@ -93,7 +93,7 @@ public class JdbcCampgroundDaoIntegrationTest {
 		List<Campground> allCampgroundsBefore = dao.getAllCampgrounds();
 		int sizeBefore = allCampgroundsBefore.size();
 		
-		jdbcTemplate.update(sqlInsertCampground1);
+		jdbcTemplate.update(sqlInsertCampground);
 		
 		List<Campground> allCampgroundsAfter = dao.getAllCampgrounds();
 		int sizeAfter = allCampgroundsAfter.size();
@@ -116,7 +116,7 @@ public class JdbcCampgroundDaoIntegrationTest {
 
 		jdbcTemplate.update(sqlInsertSite);
 
-		List<Site> allCampgroundsWithUtilityHookupsAfter = dao.getAllCampgroundsWithUtilityHookups();
+		List<Campground> allCampgroundsWithUtilityHookupsAfter = dao.getAllCampgroundsWithUtilityHookups();
 		int sizeAfter = allCampgroundsWithUtilityHookupsAfter.size();
 
 		assertEquals(sizeBefore + 1, sizeAfter);

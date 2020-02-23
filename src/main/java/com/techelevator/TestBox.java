@@ -14,16 +14,23 @@ public class TestBox {
 		System.out.println(printToSee);
 
 
-		System.out.println("         ___   __    ___  ");
-		System.out.println("|\\    | |   | |  \\  |   |  ");
-		System.out.println("| \\   | |___| |   | |___/  ");
-		System.out.println("|  \\  | |     |   | |   \\  ");
-		System.out.println("|   \\ | |     |   | |   |  ");
-		System.out.println("|    \\| |     |__/  |__/  ");
-		System.out.println("                         ");
-		System.out.println("                         ");
+		System.out.println("          ___  _______   ___      ____       			___			             ");
+		System.out.println("|\\    |  |   |    |       |      /	  \\	|\\	   |   |   |   	|	             ");
+		System.out.println("| \\   |  |___|    |       |   	 |	   |	| \\   |   |___|    |		         ");
+		System.out.println("|  \\  | |     |   |       |   	 |     |	|  \\  |  |	    |  	|	             ");
+		System.out.println("|   \\ | |     |   |       |  	 |	   |	|	\\ |  |		|	|	             ");
+		System.out.println("|    \\| |     |   |      _|_ 	  \\____/	|	 \\|  |		|	|_____               ");
+		System.out.println("                          											             ");
+		System.out.println("                         											             ");
 	
-	
+		System.out.println(" ______																						");
+		System.out.println("|	   |																				");
+		System.out.println("|	   | 																				");
+		System.out.println("|______|																				");
+		System.out.println("|																						");
+		System.out.println("|																						");
+		System.out.println("|		 																					");
+		
 
 	System.out.println("National Park Interface Main Menu\n");
 

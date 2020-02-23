@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,9 +25,9 @@ import com.techelevator.projects.model.Department;
 
 public class JdbcParkDaoIntegrationTest {
 	private static SingleConnectionDataSource dataSource;
-	private JdbcSiteDao dao;
+	private JdbcParkDao dao;
 	private JdbcTemplate jdbcTemplate;
-	private String sqlInsertSite;
+	private String sqlInsertPark;
 
 	@BeforeClass
 	public static void setUpDataSource() {
@@ -45,8 +46,8 @@ public class JdbcParkDaoIntegrationTest {
 	@Before
 	public void setup() {
 		jdbcTemplate = new JdbcTemplate(dataSource);
-		dao = new JdbcSiteDao(dataSource);
-		sqlInsertSite = "";
+		dao = new JdbcParkDao(dataSource);
+		sqlInsertPark = "";
 
 	}
 
@@ -57,19 +58,21 @@ public class JdbcParkDaoIntegrationTest {
 
 	@Test
 	public void checks_map_park_from_sql() {
+		int park_id = 42;
 		String name = "park";
 		String location = "park";
-		Date establish_date = 10-23-43;
+		LocalDate establish_date = LocalDate.ofYearDay(1942, 360);
 		double area = 12.25;
 		int visitors = 12;
 		String description = "yes";
 
-		Park newPark = dao.mapParkFromSQL(name, location, establish_date, area, visitors, description);
-
+		Park newPark = dao.mapFromSQL(name, location, establish_date, area, visitors, description);
+		
+		Assert.assertEquals(park_id, newPark.getName());
 		Assert.assertEquals(name, newPark.getName());
 		Assert.assertEquals(location, newPark.getLocation());
 		Assert.assertEquals(establish_date, newPark.getEstablish_date());
-		Assert.assertEquals(area, newPark.getArea());
+		Assert.assertEquals(area, newPark.getArea(), 0);
 		Assert.assertEquals(visitors, newPark.getVisitors());
 		Assert.assertEquals(description, newPark.getDescription());
 	}
@@ -78,9 +81,9 @@ public class JdbcParkDaoIntegrationTest {
 		List<Park> allParksBefore = dao.getAllParks();
 		int sizeBefore = allParksBefore.size();
 		
-		jdbcTemplate.update(sqlInsertParks1);
+		jdbcTemplate.update(sqlInsertPark);
 		
-		List<Park> allParkssAfter = dao.getAllParks();
+		List<Park> allParksAfter = dao.getAllParks();
 		int sizeAfter = allParksAfter.size();
 		
 		assertNotNull(allParksAfter);

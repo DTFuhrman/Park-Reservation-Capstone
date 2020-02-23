@@ -95,22 +95,26 @@ public class JdbcSiteDaoIntegrationTest {
 		jdbcTemplate.update(sqlInsertPark, parkId);
 		jdbcTemplate.update(sqlInsertCampground, campgroundId, parkId);
 		jdbcTemplate.update(sqlInsertSite, campgroundId);
-		
 
 		List<Site> allSitesWithUtilityHookupsAfter = dao.getAllCampSitesWithUtilityHookups();
 		int sizeAfter = allSitesWithUtilityHookupsAfter.size();
-		
 
 		assertEquals(sizeBefore + 1, sizeAfter);
 
 	}
 
+	// Check this out
 	@Test
 	public void checks_for_rv_accessible_campsites() {
 		List<Site> allSitesWithRVAccess = dao.getRVAccessibleCampSites();
 		int sizeBefore = allSitesWithRVAccess.size();
-
-		jdbcTemplate.update(sqlInsertSite);
+		SqlRowSet parkIdRowSet = jdbcTemplate.queryForRowSet(sqlGetNextIdForCampground);
+		int parkId = parkIdRowSet.getInt(0);
+		SqlRowSet campgroundIdRowSet = jdbcTemplate.queryForRowSet(sqlGetNextIdForCampground);
+		int campgroundId = campgroundIdRowSet.getInt(0);
+		jdbcTemplate.update(sqlInsertPark, parkId);
+		jdbcTemplate.update(sqlInsertCampground, campgroundId, parkId);
+		jdbcTemplate.update(sqlInsertSite, campgroundId);
 
 		List<Site> allSitesWithRVAccessAfter = dao.getRVAccessibleCampSites();
 		int sizeAfter = allSitesWithRVAccess.size();

@@ -1,5 +1,6 @@
 package com.techelevator.campground.model.jdbc;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +23,7 @@ public class JdbcParkDao implements ParkDAO {
 	}
 
 	@Override
-	public Park mapFromSQL(String name, String location, Date establish_date, double area, int visitors,
+	public Park mapFromSQL(String name, String location, LocalDate establish_date, double area, int visitors,
 			String description) {
 		Park thePark = new Park();
 		thePark.setName(name);
