@@ -2,10 +2,12 @@ package com.techelevator;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.techelevator.campground.model.Campground;
 import com.techelevator.campground.model.CampgroundDAO;
@@ -267,9 +269,9 @@ public class CampgroundCLI {
 
 	private void handleReservationByPark(Park park) {
 		int chosenParkID = park.getPark_id();
-		while(true) {
+		while (true) {
 			menu.printMenu(RESERVATION_MENU_OPTIONS);
-			LocalDate[] reservationDates = acceptReservationInput();
+			LocalDate[] reservationDates = acceptReservationDateInput();
 			List<Site> reservedSites = siteDAO.getSitesReservedOnDatesByPark(chosenParkID, reservationDates[0],
 					reservationDates[1]);
 			List<Site> allSites = siteDAO.getAllSitesByPark(chosenParkID);
@@ -277,44 +279,116 @@ public class CampgroundCLI {
 			int numOfDays = reservationDates[0].until(reservationDates[1]).getDays();
 			numOfDays++;
 			menu.printSiteListByPark(reservedSites, campgrounds, allSites, park, numOfDays);
-			Reservation justBooked = checkReservationByPark(chosenParkID, reservationDates[0], reservationDates[1]);
+			Reservation justBooked = acceptReservationInput(reservationDates, allSites);
 			boolean booked = bookReservation(justBooked);
-			handleBookAttempt(booked);
+			if (booked == true){
+				break;
+			}
 		}
 	}
 
 	public void handleReservationByCampground(Campground campground) {
 		int chosenCampgroundID = campground.getCampground_id();
 		while (true) {
-			menu.printMenu(RESERVATION_MENU_OPTIONS);
-			LocalDate[] reservationDates = acceptReservationInput();
+			LocalDate[] reservationDates = acceptReservationDateInput();
 			List<Site> reservedSites = siteDAO.getSitesReservedOnDates(chosenCampgroundID, reservationDates[0],
 					reservationDates[1]);
 			List<Site> allSites = siteDAO.getAllSitesByCampground(chosenCampgroundID);
 			int numOfDays = reservationDates[0].until(reservationDates[1]).getDays();
 			numOfDays++;
 			menu.printSiteListByCampground(reservedSites, allSites, campground, numOfDays);
-			Reservation justBooked = checkReservation(chosenCampgroundID, reservationDates[0], reservationDates[1]);
+			Reservation justBooked = acceptReservationInput(reservationDates, allSites);
 			boolean booked = bookReservation(justBooked);
-			handleBookAttempt(booked);
+			if (booked == true){
+				break;
+			}
 		}
 	}
 
-	private LocalDate[] acceptReservationInput() {
-		LocalDate[] reservationDates = new LocalDate[2];
-		//print prompt and collect arrival date
-		//print prompt and collect end date
-		return reservationDates;
+	private Reservation acceptReservationInput(LocalDate[] reservationDates,
+			List<Site> allSites) {
+		Reservation tryToBook = new Reservation();
+		Site siteToBook = null;
+		// Get next ID for reservations
+		int resID = reservationDAO.getNextID();
+		int siteID;
+		// Let them pick a site and pull the ID
+		while (true) {
+			System.out.println("Which Site?");
+			String siteChosen = menu.getGenericInput();
+			int siteNum;
+			try {
+				siteNum = Integer.valueOf(siteChosen);
+			} catch (Exception e) {
+				System.out.println("Please pick a valid site");
+			}
+			siteNum = -1;
+			if ((siteNum > 0 && siteNum < allSites.size() + 1) && (!allSites.get(siteNum - 1).isAvailable())) {
+				System.out.println("Unavailable. \nYou Must Pick An Available Site");
+				continue;
+			}
+			if ((siteNum > 0 && siteNum < allSites.size() + 1)) {
+				siteToBook = allSites.get(siteNum - 1);
+				siteID = siteToBook.getSite_id();
+				break;
+			}
+		}
+		String resName = acceptReservationNameInput();
+		LocalDate fromDate = reservationDates[0];
+		LocalDate toDate = reservationDates[1];
+		LocalDate createDate = LocalDate.now();
+
+		reservationDAO.mapReservationFromSQL(resID, siteID, resName, fromDate, toDate, createDate);
+
+		return tryToBook;
 	}
 
-	private Reservation checkReservation(int chosenCampgroundID, LocalDate localDate, LocalDate localDate2) {
-		// TODO Auto-generated method stub
-		return null;
+	private String acceptReservationNameInput() {
+		System.out.println("Enter A Name For Your Reservation:");
+
+		String input = menu.getGenericInput();
+
+		return input;
 	}
-	
-	private Reservation checkReservationByPark(int chosenParkID, LocalDate localDate, LocalDate localDate2) {
-		// TODO Auto-generated method stub
-		return null;
+
+	private LocalDate[] acceptReservationDateInput() {
+		LocalDate[] reservationDates = new LocalDate[2];
+		// print prompt and collect arrival date
+		boolean acceptingInput = false;
+		do {
+			System.out.println("What is the arrival date? dd/mm/year");
+
+			String firstDateString = menu.getGenericInput();
+			LocalDate firstAttempt = null;
+			try {
+				String[] firstDate = firstDateString.split("/");
+				firstAttempt = LocalDate.of(Integer.valueOf(firstDate[2]), Integer.valueOf(firstDate[1]),
+						Integer.valueOf(firstDate[0]));
+			} catch (Exception e) {
+				System.out.println("Date not recognized. Use format dd/mm/year.");
+				acceptingInput = true;
+			}
+			reservationDates[0] = firstAttempt;
+		} while (acceptingInput);
+		acceptingInput = false;
+		do {
+			System.out.println("What is the departure date? dd/mm/year");
+
+			String secondDateString = menu.getGenericInput();
+			LocalDate secondAttempt = null;
+			try {
+				String[] secondDate = secondDateString.split("/");
+				secondAttempt = LocalDate.of(Integer.valueOf(secondDate[2]), Integer.valueOf(secondDate[1]),
+						Integer.valueOf(secondDate[0]));
+			} catch (Exception e) {
+				System.out.println("Date not recognized. Use format dd/mm/year.");
+				acceptingInput = true;
+			}
+
+			reservationDates[1] = secondAttempt;
+		} while (acceptingInput);
+		// print prompt and collect end date
+		return reservationDates;
 	}
 
 	private void handleParkwideReservation() {
@@ -327,8 +401,4 @@ public class CampgroundCLI {
 		return false;
 	}
 
-	private void handleBookAttempt(boolean booked) {
-		// TODO Auto-generated method stub
-
-	}
 }

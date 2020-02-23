@@ -143,8 +143,11 @@ public class JdbcSiteDao implements SiteDAO {
 	public List<Site> getSitesReservedOnDates(int campground_id, LocalDate start, LocalDate end) {
 
 		List<Site> UnavailableCampsites = new ArrayList<>();
-		
-		String sqlGetUnavailableCampsites = "SELECT * FROM site LEFT JOIN reservation ON site.site_id = reservation.site_id WHERE (campground_id = ?) AND (daterange(from_date, to_date, '[]') && daterange(date ?, date ?, '[]')) AND from_date IS NOT NULL";
+		//This query isn't working
+		String sqlGetUnavailableCampsites = "SELECT * FROM site \n" + 
+				"LEFT JOIN reservation ON site.site_id = reservation.site_id \n" + 
+				"WHERE campground_id = ? AND (daterange(from_date, to_date, '[]') OVERLAPS (daterange(date ?, date ?, '[]')) \n" + 
+				"        AND from_date IS NOT NULL);";
 		String formattedStartDate = start.format(DateTimeFormatter.ofPattern("yy-dd-MM"));
 		String formattedEndDate = end.format(DateTimeFormatter.ofPattern("yy-dd-MM"));
 		

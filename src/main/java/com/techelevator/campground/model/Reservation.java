@@ -10,7 +10,6 @@ public class Reservation {
 	private LocalDate from_date;
 	private LocalDate to_date;
 	private LocalDate create_date;
-	private boolean available;
 	
 	
 	//GETTERS AND SETTERS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -49,18 +48,6 @@ public class Reservation {
 	}
 	public void setCreate_date(LocalDate create_date) {
 		this.create_date = create_date;
-	}
-	
-	public boolean isAvialable() {
-		return this.available;
-	}
-	
-	public void markAvailable() {
-		this.available = true;
-	}
-	
-	public void markUnavailable() {
-		this.available = false;
 	}
 	
 	
