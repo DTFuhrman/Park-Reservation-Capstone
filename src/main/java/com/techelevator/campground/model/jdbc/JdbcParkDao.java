@@ -23,9 +23,10 @@ public class JdbcParkDao implements ParkDAO {
 	}
 
 	@Override
-	public Park mapFromSQL(String name, String location, LocalDate establish_date, double area, int visitors,
+	public Park mapFromSQL(int park_id, String name, String location, Date establish_date, double area, int visitors,
 			String description) {
 		Park thePark = new Park();
+		thePark.setPark_id(park_id);
 		thePark.setName(name);
 		thePark.setLocation(location);
 		thePark.setEstablish_date(establish_date);
@@ -43,7 +44,7 @@ public class JdbcParkDao implements ParkDAO {
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetAllParks);
 		
 		while (results.next()) {
-			Park newPark = mapFromSQL(results.getString("name"), results.getString("location"),
+			Park newPark = mapFromSQL(results.getInt("park_id"), results.getString("name"), results.getString("location"),
 					results.getDate("establish_date"), results.getDouble("area"), results.getInt("visitors"),
 					results.getString("description"));
 
@@ -60,7 +61,7 @@ public class JdbcParkDao implements ParkDAO {
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetAllParksWithUtilities);
 		
 		while (results.next()) {
-			Park newPark = mapFromSQL(results.getString("name"), results.getString("location"),
+			Park newPark = mapFromSQL(results.getInt("park_id"), results.getString("name"), results.getString("location"),
 					results.getDate("establish_date"), results.getDouble("area"), results.getInt("visitors"),
 					results.getString("description"));
 
@@ -78,7 +79,7 @@ public class JdbcParkDao implements ParkDAO {
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetAllParksWithVacancy);
 		
 		while (results.next()) {
-			Park newPark = mapFromSQL(results.getString("name"), results.getString("location"),
+			Park newPark = mapFromSQL(results.getInt("park_id"), results.getString("name"), results.getString("location"),
 					results.getDate("establish_date"), results.getDouble("area"), results.getInt("visitors"),
 					results.getString("description"));
 			

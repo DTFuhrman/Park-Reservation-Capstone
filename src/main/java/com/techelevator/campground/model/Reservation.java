@@ -50,6 +50,7 @@ public class Reservation {
 		this.create_date = create_date;
 	}
 	
+	
 	public String toString() {
 		return "Reservation " + reservation_id + ") " + this.name;
 	}

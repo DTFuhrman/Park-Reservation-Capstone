@@ -15,8 +15,12 @@ public interface SiteDAO {
 	
 	public List<Site> getSitesReservedOnDates(int campground_id, LocalDate start, LocalDate end);
 
-	List<Site> getAllSitesByCampground(int campground_id);
+	public List<Site> getAllSitesByCampground(int campground_id);
 
-	List<Site> getAllSites();
+	public List<Site> getAllSitesByPark(int park_id);
+
+	public List<Site> getAllSites();
+
+	public List<Site> getSitesReservedOnDatesByPark(int chosenParkID, LocalDate localDate, LocalDate localDate2);
 	
 }

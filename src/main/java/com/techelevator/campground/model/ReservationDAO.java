@@ -26,4 +26,6 @@ public interface ReservationDAO {
 	
 	public List<Reservation> getAvailableReservationsByCampGround(int campgroundID, Date startDate, Date endDate);
 
+	public int getNextID();
+
 }
