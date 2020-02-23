@@ -53,6 +53,23 @@ public class JdbcSiteDao implements SiteDAO {
 	}
 
 	@Override
+	public List<Site> getAllSitesByPark(int park_id) {
+		List<Site> campsitesByPark = new ArrayList<>();
+		String sqlGetAllCampsitesByPark = "SELECT * FROM site JOIN campground on site.campground_id = campground.campground_id WHERE campground.park_id = ?";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetAllCampsitesByPark, park_id);
+
+		while (results.next()) {
+			Site newCampsite = mapSiteFromSQL(results.getInt("site_id"), results.getInt("campground_id"),
+					results.getInt("site_number"), results.getInt("max_occupancy"), results.getBoolean("accessible"),
+					results.getInt("max_rv_length"), results.getBoolean("utilities"));
+
+			campsitesByPark.add(newCampsite);
+		}
+
+		return campsitesByPark;
+	}
+	
+	@Override
 	public List<Site> getAllSitesByCampground(int campground_id) {
 		List<Site> campsitesByCampground = new ArrayList<>();
 		String sqlGetAllCampsitesByCampground = "SELECT * FROM site WHERE campground_id = ?";
@@ -126,8 +143,11 @@ public class JdbcSiteDao implements SiteDAO {
 	public List<Site> getSitesReservedOnDates(int campground_id, LocalDate start, LocalDate end) {
 
 		List<Site> UnavailableCampsites = new ArrayList<>();
-		
-		String sqlGetUnavailableCampsites = "SELECT * FROM site LEFT JOIN reservation ON site.site_id = reservation.site_id WHERE (campground_id = ?) AND (daterange(from_date, to_date, '[]') && daterange(date ?, date ?, '[]')) AND from_date IS NOT NULL";
+		//This query isn't working
+		String sqlGetUnavailableCampsites = "SELECT * FROM site \n" + 
+				"LEFT JOIN reservation ON site.site_id = reservation.site_id \n" + 
+				"WHERE campground_id = ? AND (daterange(from_date, to_date, '[]') OVERLAPS (daterange(date ?, date ?, '[]')) \n" + 
+				"        AND from_date IS NOT NULL);";
 		String formattedStartDate = start.format(DateTimeFormatter.ofPattern("yy-dd-MM"));
 		String formattedEndDate = end.format(DateTimeFormatter.ofPattern("yy-dd-MM"));
 		
@@ -142,5 +162,11 @@ public class JdbcSiteDao implements SiteDAO {
 		}
 
 		return UnavailableCampsites;
+	}
+
+	@Override
+	public List<Site> getSitesReservedOnDatesByPark(int chosenParkID, LocalDate localDate, LocalDate localDate2) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

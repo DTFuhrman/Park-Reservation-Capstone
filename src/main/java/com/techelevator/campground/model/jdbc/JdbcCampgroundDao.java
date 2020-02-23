@@ -23,7 +23,7 @@ public class JdbcCampgroundDao implements CampgroundDAO {
 	}
 	
 	@Override
-	public Campground mapCampgroundFromSQL(int campground_id, int park_id, String name, int open_from_mm, int open_to_mm, int daily_fee) {
+	public Campground mapCampgroundFromSQL(int campground_id, int park_id, String name, int open_from_mm, int open_to_mm, double daily_fee) {
 		Campground theCampground = new Campground();
 		theCampground.setCampground_id(campground_id);
 		theCampground.setPark_id(park_id);
@@ -41,7 +41,7 @@ public class JdbcCampgroundDao implements CampgroundDAO {
 		String sqlAllCampgroundsQueary = "SELECT * FROM campground WHERE park_id = ?";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlAllCampgroundsQueary, park_id);
 		while (results.next()){
-			Campground eachCampground = mapCampgroundFromSQL(results.getInt("campground_id"), results.getInt("park_id"), results.getString("name"), results.getInt("open_from_mm"), results.getInt("open_to_mm"), results.getInt("daily_fee"));
+			Campground eachCampground = mapCampgroundFromSQL(results.getInt("campground_id"), results.getInt("park_id"), results.getString("name"), results.getInt("open_from_mm"), results.getInt("open_to_mm"), results.getDouble("daily_fee"));
 			campgroundsByPark.add(eachCampground);
 		}
 		
@@ -83,7 +83,7 @@ public class JdbcCampgroundDao implements CampgroundDAO {
 		String formattedEndDate = resStart.format(DateTimeFormatter.ofPattern("yy-dd-MM"));
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlCampgroundsSeasonQueary, formattedStartDate, formattedEndDate);
 		while (results.next()){
-			Campground eachCampground = mapCampgroundFromSQL(results.getInt("campground_id"), results.getInt("park_id"), results.getString("name"), results.getInt("open_from_mm"), results.getInt("open_to_mm"), results.getInt("daily_fee"));
+			Campground eachCampground = mapCampgroundFromSQL(results.getInt("campground_id"), results.getInt("park_id"), results.getString("name"), results.getInt("open_from_mm"), results.getInt("open_to_mm"), results.getDouble("daily_fee"));
 			campgroundsInSeason.add(eachCampground);
 		}
 		
@@ -97,7 +97,7 @@ public class JdbcCampgroundDao implements CampgroundDAO {
 		
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlCampgroundsSeasonQueary, resStartMonth, resEndMonth);
 		while (results.next()){
-			Campground eachCampground = mapCampgroundFromSQL(results.getInt("campground_id"), results.getInt("park_id"), results.getString("name"), results.getInt("open_from_mm"), results.getInt("open_to_mm"), results.getInt("daily_fee"));
+			Campground eachCampground = mapCampgroundFromSQL(results.getInt("campground_id"), results.getInt("park_id"), results.getString("name"), results.getInt("open_from_mm"), results.getInt("open_to_mm"), results.getDouble("daily_fee"));
 			campgroundsInSeason.add(eachCampground);
 		}
 		
@@ -110,7 +110,7 @@ public class JdbcCampgroundDao implements CampgroundDAO {
 		String sqlAllCampgroundsQueary = "SELECT * FROM campground JOIN site ON campground.campground_id = site.campground_id WHERE utilities = TRUE";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlAllCampgroundsQueary);
 		while (results.next()){
-			Campground eachCampground = mapCampgroundFromSQL(results.getInt("campground_id"), results.getInt("park_id"), results.getString("name"), results.getInt("open_from_mm"), results.getInt("open_to_mm"), results.getInt("daily_fee"));
+			Campground eachCampground = mapCampgroundFromSQL(results.getInt("campground_id"), results.getInt("park_id"), results.getString("name"), results.getInt("open_from_mm"), results.getInt("open_to_mm"), results.getDouble("daily_fee"));
 			campgroundsWithUtil.add(eachCampground);
 		}
 		

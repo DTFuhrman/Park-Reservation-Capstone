@@ -8,6 +8,7 @@ public class Site {
 	private boolean accessible;
 	private int max_rv_length;
 	private boolean utilities;
+	private boolean available;
 	
 	//GETTERS AND SETTERS!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public int getSite_id() {
@@ -51,6 +52,18 @@ public class Site {
 	}
 	public void setUtilities(boolean utilities) {
 		this.utilities = utilities;
+	}
+	
+	public boolean isAvailable() {
+		return this.available;
+	}
+	
+	public void markAvailable() {
+		this.available = true;
+	}
+	
+	public void markUnavailable() {
+		this.available = false;
 	}
 	
 	public String toString() {
