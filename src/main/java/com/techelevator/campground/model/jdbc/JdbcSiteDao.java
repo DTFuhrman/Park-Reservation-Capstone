@@ -138,6 +138,41 @@ public class JdbcSiteDao implements SiteDAO {
 
 		return RVAccessibleCampsites;
 	}
+	
+	@Override
+	public List<Site> getAvailableSites(int campground_id, LocalDate start, LocalDate end) {
+
+		List<Site> availableSites = new ArrayList<>();
+		//This query isn't working
+		String sqlGetAvailableCampsites = "SELECT distinct site.site_id, site.campground_id, max_occupancy, accessible, max_rv_length, utilities, open_from_mm, open_to_mm, daily_fee, from_date, to_date, reservation.name " +
+				"FROM site " +
+				"JOIN campground ON campground.campground_id = site.campground_id " +
+				"JOIN reservation ON site.site_id = reservation.site_id " +
+				"WHERE site.campground_id = ?::numeric " +
+				"AND site.site_id NOT IN ( " +
+				        "SELECT site.site_id " +
+				        "FROM reservation " +
+				        "WHERE (?::date, ?::date) " +
+				        "OVERLAPS (reservation.from_date, reservation.to_date) " +
+				        "ORDER BY site.site_id) " +
+				"LIMIT 20;";
+		String formattedStartDate = start.format(DateTimeFormatter.ofPattern("yyy-dd-MM"));
+		String formattedEndDate = end.format(DateTimeFormatter.ofPattern("yyy-dd-MM"));
+		
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetAvailableCampsites, campground_id, formattedStartDate, formattedEndDate);
+
+		while (results.next()) {
+			Site newCampsite = mapSiteFromSQL(results.getInt("site_id"), results.getInt("campground_id"),
+					results.getInt("site_number"), results.getInt("max_occupancy"), results.getBoolean("accessible"),
+					results.getInt("max_rv_length"), results.getBoolean("utilities"));
+
+			availableSites.add(newCampsite);
+		}
+
+		return availableSites;
+	}
+
+	
 
 	@Override
 	public List<Site> getSitesReservedOnDates(int campground_id, LocalDate start, LocalDate end) {

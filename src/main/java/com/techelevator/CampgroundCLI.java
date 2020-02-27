@@ -72,7 +72,6 @@ public class CampgroundCLI {
 		dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
 		dataSource.setUsername("postgres");
 		dataSource.setPassword("postgres1");
-
 		CampgroundCLI application = new CampgroundCLI(dataSource);
 		application.run();
 	}
@@ -80,7 +79,6 @@ public class CampgroundCLI {
 	public CampgroundCLI(DataSource dataSource) {
 		// create your DAOs here
 		this.menu = new Menu(System.in, System.out);
-
 		campgroundDAO = new JdbcCampgroundDao(dataSource);
 		reservationDAO = new JdbcReservationDao(dataSource);
 		parkDAO = new JdbcParkDao(dataSource);
@@ -291,7 +289,7 @@ public class CampgroundCLI {
 		int chosenCampgroundID = campground.getCampground_id();
 		while (true) {
 			LocalDate[] reservationDates = acceptReservationDateInput();
-			List<Site> reservedSites = siteDAO.getSitesReservedOnDates(chosenCampgroundID, reservationDates[0],
+			List<Site> reservedSites = siteDAO.getAvailableSites(chosenCampgroundID, reservationDates[0],
 					reservationDates[1]);
 			List<Site> allSites = siteDAO.getAllSitesByCampground(chosenCampgroundID);
 			int numOfDays = reservationDates[0].until(reservationDates[1]).getDays();

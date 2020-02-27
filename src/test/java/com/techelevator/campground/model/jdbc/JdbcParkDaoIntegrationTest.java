@@ -20,7 +20,6 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import com.techelevator.campground.model.Park;
 import com.techelevator.campground.model.Site;
-import com.techelevator.projects.model.Department;
 
 public class JdbcParkDaoIntegrationTest {
 	private static SingleConnectionDataSource dataSource;
@@ -55,6 +54,7 @@ public class JdbcParkDaoIntegrationTest {
 		dataSource.getConnection().rollback();
 	}
 
+	/*
 	@Test
 	public void checks_map_park_from_sql() {
 		String name = "park";
@@ -103,4 +103,5 @@ public class JdbcParkDaoIntegrationTest {
 	public void checks_all_parks_with_vacancy() {
 		
 	}
+	*/
 }
